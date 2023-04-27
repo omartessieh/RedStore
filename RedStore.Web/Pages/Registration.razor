@@ -1,0 +1,100 @@
+﻿@page "/Registration"
+
+<h2 class="title">Registration Form</h2>
+
+<MudGrid>
+    <MudItem xs="12" Class="my-4">
+        <EditForm Model="@userDto" OnSubmit="RegistrationSubmit">
+                <MudCardContent>
+                    <MudGrid>
+                        <MudItem xs="12">
+                            <div class="control-group" style="padding-bottom:11px;">
+                                <input type="text" class="form-control" @bind="@userDto.Username"
+                                       For="@(() => @userDto.Username)" placeholder="User Name" required="required" />
+                            </div>
+                        </MudItem>
+                        <MudItem xs="12" sm="6">
+                            <div class="control-group" style="padding-bottom:11px;">
+                                <input type="text" class="form-control" @bind="@userDto.First_Name"
+                                       For="@(() => @userDto.First_Name)" placeholder="First Name" required="required" />
+                            </div>
+                        </MudItem>
+                        <MudItem xs="12" sm="6">
+                            <div class="control-group" style="padding-bottom:11px;">
+                                <input type="text" class="form-control" @bind="@userDto.Last_Name"
+                                       For="@(() => @userDto.Last_Name)" placeholder="Last Name" required="required" />
+                            </div>
+                        </MudItem>
+                        <MudItem xs="12" sm="6">
+                            <div class="control-group" style="padding-bottom:11px;">
+                                <input type="password" class="form-control" @bind="@userDto.Password"
+                                       For="@(() => @userDto.Password)" placeholder="Password" required="required" minlength="6"/>
+                            </div>
+                        </MudItem>
+                        <MudItem xs="12" sm="6">
+                            <div class="control-group" style="padding-bottom:11px;">
+                                <input type="email" class="form-control" @bind="@userDto.Email"
+                                       For="@(() => @userDto.Email)" placeholder="Email" required="required" />
+                            </div>
+                        </MudItem>
+                        <MudItem xs="12" sm="6">
+                            <div class="control-group" style="padding-bottom:11px;">
+                                <input type="number" class="form-control" @bind="@userDto.Phone_Number"
+                                       For="@(() => @userDto.Phone_Number)" placeholder="Phone Number" required="required" />
+                            </div>
+                        </MudItem>
+                        <MudItem xs="12" sm="6">
+                            <div class="control-group" style="padding-bottom:11px;">
+                                <input type="text" class="form-control" @bind="@userDto.Country"
+                                       For="@(() => @userDto.Country)" placeholder="Country" required="required" />
+                            </div>
+                        </MudItem>
+                        <MudItem xs="12" sm="6">
+                            <div class="control-group" style="padding-bottom:11px;">
+                                <input type="text" class="form-control" @bind="@userDto.Governorate"
+                                       For="@(() => @userDto.Governorate)" placeholder="Governorate" required="required" />
+                            </div>
+                        </MudItem>
+                        <MudItem xs="12" sm="6">
+                            <div class="control-group" style="padding-bottom:11px;">
+                                <input type="text" class="form-control" @bind="@userDto.City"
+                                       For="@(() => @userDto.City)" placeholder="City" required="required" />
+                            </div>
+                        </MudItem>
+                        <MudItem xs="12" sm="5">
+                            <div class="control-group" style="padding-bottom:11px;">
+                                <input type="text" class="form-control" @bind="@userDto.Street"
+                                       For="@(() => @userDto.Street)" placeholder="Street" required="required" />
+                            </div>
+                        </MudItem>
+                        <MudItem xs="12" sm="5">
+                            <div class="control-group" style="padding-bottom:11px;">
+                                <input type="text" class="form-control" @bind="@userDto.Building"
+                                       For="@(() => @userDto.Building)" placeholder="Building" required="required" />
+                            </div>
+                        </MudItem>
+                        <MudItem xs="12" sm="2">
+                            <div class="control-group" style="padding-bottom:11px;">
+                                <input type="number" class="form-control" @bind="@userDto.Floor"
+                                       For="@(() => @userDto.Floor)" placeholder="Floor" required="required" />
+                            </div>
+                        </MudItem>
+                    </MudGrid>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Dark" Class="ml-auto">Register</MudButton>
+                </MudCardActions>
+        </EditForm>
+        <MudItem xs="12" Class="my-4">
+            <MudText Typo="Typo.body2" Align="Align.Center">
+                <a style="color:black;" href="/Login">Back Login Form</a>
+            </MudText>
+        </MudItem>
+        <MudItem xs="12" Class="my-4">
+            @if (@RegFaild != null)
+            {
+                <MudAlert Severity="Severity.Error" ContentAlignment="HorizontalAlignment.Center">@RegFaild</MudAlert>
+            }
+        </MudItem>
+    </MudItem>
+</MudGrid>

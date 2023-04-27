@@ -1,0 +1,178 @@
+﻿@page "/ProductItems/{Category_id:int}/{Title}"
+@inject HttpClient http
+
+@*Top Page Logo & Search*@
+<MudGrid Class="mb-10">
+    <MudItem xs="12" sm="4" lg="4">
+        <MudImage Src="/Images/logo.png" Height="80" Style="width:100%" Alt="Örebro Slott" Class="align-center justify-center" />
+    </MudItem>
+    <MudItem xs="12" sm="1" lg="2">
+    </MudItem>
+    <MudItem xs="12" sm="7" lg="6">
+        <div class="autocomplete">
+            <div style="position: relative;">
+                <i style="position: absolute;top: 22px;left: 20px;color: black;font-size: 20px;" class="fa fa-search"></i>
+                <input type="search" aria-label="search top" @bind=@ValueText @oninput=HandleInput class="form-control filter el-input__inner" placeholder="Search on RedStore" style="width: 100%;height: 65px;margin-top: 6px;text-indent: 40px;" />
+            </div>
+            @if (searchs is not null)
+            {
+                <ul class="options">
+                    @if (searchs.Any())
+                    {
+                        @foreach (var search in searchs)
+                        {
+                            <li class="option" @onclick=@(_ => SelectCustomerAsync(search.Id,search.Title,search.Type))>
+                                <span class="option-text">@search.Title</span>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        @*<li class="disabled option">No results</li>*@
+                    }
+                </ul>
+            }
+        </div>
+    </MudItem>
+</MudGrid>
+
+@*Breadcrumb*@
+<ul class="breadcrumb">
+    <li><a href="#" style="color:gray;text-decoration:none;">RedStore</a></li>
+    <li style="color:black;">@Title</li>
+</ul>
+
+<MudGrid Class="mt-3 mb-15">
+
+    @*List Of SubCategories*@
+    @if (SubCategories == null)
+    {
+        <MudItem xs="12" sm="12" lg="3">
+            <MudList>
+                <div class="link-menu">
+                    <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="500px" />
+                </div>
+            </MudList>
+        </MudItem>
+    }
+    else
+    {
+        <MudItem xs="12" sm="12" lg="3">
+            <div class="vertical-menu">
+                <MudPaper>
+                    <MudList Clickable="@Clickable">
+                        <div class="link-menu">
+                            <MudListItem @onclick="() => LoadDataCategory(Category_id)" Text="@Title" Value="@Category_id" Style="cursor:pointer;" />
+                        </div>
+                        @foreach (var items in SubCategories)
+                        {
+                            <div class="link-menu">
+                                <MudListItem @onclick="() => LoadData(items.SubCategory_id)" Text="@items.Title" Value="@items.SubCategory_id" Style="cursor:pointer;" />
+                            </div>
+                        }
+                    </MudList>
+                </MudPaper>
+            </div>
+
+            <div class="drop-menu">
+                <MudPaper Width="100%">
+                    <MudList Clickable="@Clickable">
+                        <MudListItem Text="@ListTitle">
+                            <NestedList>
+                                <div class="link-drop-menu">
+                                    <MudListItem @onclick="() => LoadDataCategory(Category_id)" Text="@Title" Value="@Category_id" Style="cursor:pointer;" />
+                                </div>
+                                @foreach (var items in SubCategories)
+                                {
+                                    <div class="link-drop-menu">
+                                        <MudListItem @onclick="() => LoadData(items.SubCategory_id)" Text="@items.Title" Value="@items.SubCategory_id" Style="cursor:pointer;" />
+                                    </div>
+                                }
+                            </NestedList>
+                        </MudListItem>
+                    </MudList>
+                </MudPaper>
+            </div>
+        </MudItem>
+    }
+
+    @*List Of Products*@
+    @if (Products == null)
+    {
+        <MudItem xs="12" sm="12" lg="9">
+            <MudGrid>
+                @for (int i = 0; i < 12; i++)
+                {
+                    <MudItem xs="6" sm="4" lg="3">
+                        <MudPaper>
+                            <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="150px" />
+                        </MudPaper>
+                    </MudItem>
+                }
+            </MudGrid>
+        </MudItem>
+    }
+    else
+    {
+        <MudItem xs="12" sm="12" lg="9">
+            <div style="padding-bottom: 54px;">
+                <span style="float:left;font-size: 20px;padding-top: 3px;">@Title</span>
+                <span style="float:right">
+                    <MudMenu Label="Sort BY Price">
+                        <MudMenuItem @onclick="Low">Low to High</MudMenuItem>
+                        <MudMenuItem @onclick="High">High to Low</MudMenuItem>
+                    </MudMenu>
+                </span>
+            </div>
+            <MudGrid>
+                @foreach (var items in Products)
+                {
+                    <div class="col-md-3 col-sm-6">
+                        <div class="product-grid">
+                            <div class="product-image">
+                                <a href="/ProductDetails/@items.Product_id">
+                                    <img class="pic-1" src="@productslink/@items.ProductImage">
+                                    <img class="pic-2" src="@productslink/@items.ProductImage">
+                                </a>
+                                <a href="/ProductDetails/@items.Product_id" class="fa fa-search product-full-view"></a>
+                            </div>
+                            <div class="product-content">
+                                <h3 class="title">@items.ProductTitle</h3>
+                                <div class="price">
+
+                                    @if (@items.Discount_Percent != 0)
+                                    {
+                                        <span>$@items.PriceAfterDiscount</span>
+                                        <span style="color: #999;text-decoration: line-through;margin: 0px 5px;">$@items.PricePerUnit</span>
+                                        <span class="product-new-label" style="float:right;color:red;">-@items.Discount_Percent%</span>
+                                    }
+                                    else
+                                    {
+                                        <span>$@items.PricePerUnit</span>
+                                    }
+                                </div>
+                                <a class="add-to-cart" href="/ProductDetails/@items.Product_id">VIEW PRODUCTS</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </MudGrid>
+        </MudItem>
+    }
+</MudGrid>
+
+<MudScrollToTop>
+    <MudFab Color="Color.Default" Icon="@Icons.Filled.ArrowUpward" />
+</MudScrollToTop>
+
+@code {
+
+    public string Search { get; set; }
+
+    public bool Clickable { get; set; } = true;
+
+    MudListItem selectedItem;
+
+    object selectedValue;
+
+}

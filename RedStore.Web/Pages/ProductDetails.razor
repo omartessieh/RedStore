@@ -1,0 +1,356 @@
+﻿@page "/ProductDetails/{Product_id:int}"
+
+@*Breadcrumb*@
+@if (Product == null)
+{
+    <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="45px" />
+}
+else
+{
+    @foreach (var product in Product)
+    {
+        <ul class="breadcrumb">
+            <li><a href="#" style="color:gray;text-decoration:none;">RedStore</a></li>
+            <li><a href="/ProductItems/@product.Category_id/@product.CategoryTitle" style="color:gray;text-decoration:none;">@product.CategoryTitle</a></li>
+            <li>@product.SubCategoryTitle</li>
+        </ul>
+    }
+
+}
+
+@if (Product == null)
+{
+    <div class="container mt-5 mb-5">
+        <div class="card">
+            <div class="row g-0">
+                <div class="col-md-6 border-end">
+                    <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="500px" />
+                </div>
+                <div class="col-md-6">
+                    <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="500px" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="200px" />
+}
+else
+{
+
+    var CarouselsCount = Product.Count();
+
+    @if (CarouselsCount > 0)
+    {
+        @foreach (var product in Product)
+        {
+            <div class="container mt-5 mb-5">
+                <div class="card">
+                    <div class="row g-0">
+                        <div class="col-md-6 border-end">
+                            <div class="d-flex flex-column justify-content-center">
+                                <div class="main_image">
+                                    <img src="@productslink/@imageSource" id="main_product_image" width="250" height="250">
+                                </div>
+                                <div class="thumbnail_images">
+                                    <ul id="thumbnail">
+                                        @foreach (var images in Images)
+                                        {
+                                            <li>
+                                                <img @onclick="() => ShowImage(images.ImageURL)" src="@productslink/@images.ImageURL" width="70" style="max-height: 100px;">
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="product-dtl">
+                                <div class="product-info">
+                                    <div class="product-name">
+                                        <div class="row">
+                                            <div class="col-10">
+                                                @product.ProductTitle
+                                            </div>
+                                            @if(User_id != 0)
+                                            {
+                                            <div class="col-2">
+                                                @if (GetFavorite.Count() > 0)
+                                                {
+                                                    <button class="favorite-btn" @onclick="() => RemoveFavorite()">
+                                                        <i class="fa-solid fa-heart"></i>
+                                                    </button>
+                                                }
+                                                else
+                                                {
+                                                    <button class="favorite-btn" @onclick="() => AddFavorite()">
+                                                        <i class="fa-regular fa-heart"></i>
+                                                    </button>
+                                                }
+                                            </div>
+                                            }
+                                        </div>
+                                    </div>
+
+                                    <div class="product-price-discount">
+
+                                        @if (@product.Discount_Percent == 0)
+                                        {
+                                            <span>$@product.PricePerUnit</span>
+                                        }
+
+                                        @if (@product.Discount_Percent != 0)
+                                        {
+                                            <span>$@product.PriceAfterDiscount</span>
+                                            <span class="line-through">$@product.PricePerUnit</span>
+                                            <span style="color:red;margin-left: 10px;font-size: 14px;">-@product.Discount_Percent%</span>
+                                        }
+                                        @if (OrderQty.Count() > 0)
+                                        {
+                                            <span style="margin-left: 10px;font-size: 14px;color: rgb(165, 165, 165);"><b>(@orderqty of @product.Qty) items in stock</b></span>
+                                        }
+                                        else
+                                        {
+                                            <span style="margin-left: 10px;font-size: 14px;color: rgb(165, 165, 165);"><b>(@orderqty) items in stock</b></span>
+                                        }
+
+                                    </div>
+                                </div>
+
+                                @if (Size.Count() > 0 || Colors.Count() > 0)
+                                {
+                                    <div style="padding-bottom:30px;">
+                                        <label for="size" style="color: #2469d1;font-weight: 600">Fast Delivery in Lebanon</label>
+
+                                        <p style="margin-bottom: 5px;">
+                                            <img src="https://images.zoodmall.com/app/appImages/shipping.png" alt="Shipping FeeIcon" class="el-icon-" style="margin-right: 0.4rem; width: 1.5rem;">
+                                            <span class="product-shipping-text">Shipping fee</span>&nbsp;
+                                            <b class="product-shipping-text">$10</b>
+                                        </p>
+
+                                        <p style="margin-bottom: 5px;">
+                                            <img src="https://images.zoodmall.com/app/appImages/clock_new.png" alt="Estimated Delivery Icon" class="el-icon-" style="margin-right: 0.4rem; width: 1.5rem;">
+                                            <span class="product-shipping-text">Estimated delivery</span>&nbsp-&nbsp;
+                                            <b class="product-shipping-text">10 Days</b>
+                                        </p>
+
+                                        <p style="margin-bottom: 5px;">
+                                            <img src="https://images.zoodmall.com/app/appImages/delivery.png" alt="Home DeliveryIcon" class="el-icon-" style="margin-right: 0.4rem; width: 1.5rem;">
+                                            <span class="product-shipping-text">Home delivery</span>&nbsp;
+                                            <b class="product-shipping-text">via - Aramex</b>
+                                        </p>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div style="padding-bottom:113px;">
+                                        <label for="size" style="color: #2469d1;font-weight: 600">Fast Delivery in Lebanon</label>
+
+                                        <p style="margin-bottom: 5px;">
+                                            <img src="https://images.zoodmall.com/app/appImages/shipping.png" alt="Shipping FeeIcon" class="el-icon-" style="margin-right: 0.4rem; width: 1.5rem;">
+                                            <span class="product-shipping-text">Shipping fee</span>&nbsp;
+                                            <b class="product-shipping-text">$10</b>
+                                        </p>
+
+                                        <p style="margin-bottom: 5px;">
+                                            <img src="https://images.zoodmall.com/app/appImages/clock_new.png" alt="Estimated Delivery Icon" class="el-icon-" style="margin-right: 0.4rem; width: 1.5rem;">
+                                            <span class="product-shipping-text">Estimated delivery</span>&nbsp-&nbsp;
+                                            <b class="product-shipping-text">10 Days</b>
+                                        </p>
+
+                                        <p style="margin-bottom: 5px;">
+                                            <img src="https://images.zoodmall.com/app/appImages/delivery.png" alt="Home DeliveryIcon" class="el-icon-" style="margin-right: 0.4rem; width: 1.5rem;">
+                                            <span class="product-shipping-text">Home delivery</span>&nbsp;
+                                            <b class="product-shipping-text">via - Aramex</b>
+                                        </p>
+                                    </div>
+                                }
+
+                                <div class="row" style="padding-bottom:20px;">
+                                    @if (Size.Count() > 0)
+                                    {
+                                        <div class="col-md-6">
+                                            <label for="size">Size</label>
+                                            <select id="size" name="size" class="form-control" @onchange="@sizeselectedValue">
+                                                <option value="0">Select Size</option>
+                                                @foreach (var size in Size)
+                                                {
+                                                    <option value="@size.Size_id">@size.Size</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    }
+                                    @if (Colors.Count() > 0)
+                                    {
+                                        <div class="col-md-6">
+                                            <label for="color">Select Color</label>
+                                            <select id="color" name="color" class="form-control" @onchange="@colorsselectedValue">
+                                                <option value="0">Colors</option>
+                                                @foreach (var colors in Colors)
+                                                {
+                                                    <option value="@colors.Color_id">@colors.Color</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="product-count">
+                                    <label for="size">Quantity</label>
+                                    <form action="#" class="display-flex" style="padding-bottom: 20px;">
+                                        <div class="qtyminus" @onclick="DecrementCount">-</div>
+                                        <input type="text" name="quantity" value="@qty" class="qty">
+                                        <div class="qtyplus" @onclick="IncrementCount">+</div>
+                                    </form>
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-12">
+                                            @if (User_id != 0)
+                                            {
+                                                <button href="#" class="round-black-btn"
+                                        @onclick="() => AddToCart_Click(new CartitemDto{
+                                                Cart_id = Cart.Cart_id,
+                                                Product_id = product.Product_id,
+                                                Color_id = colorsValue,
+                                                Size_id = sizeValue,
+                                                Qty = qty
+                                                })">
+                                                    Add to Cart
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button type="button" class="btn btn-dark disabled" style="padding: 7px 46px;margin-top: 20px;border: solid 2px #212529;"> Add to Cart</button>
+                                            }
+                                        </div>
+                                        <div class="col-md-6 col-sm-12">
+                                            @if (@checksize != null && @checkcolor == null && @checksuccess == null && @checkcartitem == null && @checktotalqty == null)
+                                            {
+                                                <MudAlert Severity="Severity.Error" Style="margin-top: 13px;">@checksize</MudAlert>
+                                            }
+                                            @if (@checkcolor != null && @checksize == null && @checksuccess == null && @checkcartitem == null && @checktotalqty == null)
+                                            {
+                                                <MudAlert Severity="Severity.Error" Style="margin-top: 13px;">@checkcolor</MudAlert>
+                                            }
+                                            @if (@checkcartitem != null && @checkcolor == null && @checksize == null && @checksuccess == null && @checktotalqty == null)
+                                            {
+                                                <MudAlert Severity="Severity.Error" Style="margin-top: 13px;">@checkcartitem</MudAlert>
+                                            }
+                                            @if (@checktotalqty != null && @checksize == null && @checkcolor == null && @checkcartitem == null && @checksuccess == null)
+                                            {
+                                                <MudAlert Severity="Severity.Error" Style="margin-top: 13px;">@checktotalqty</MudAlert>
+                                            }
+                                            @if (@checksuccess != null && @checksize == null && @checkcolor == null && @checkcartitem == null && @checktotalqty == null)
+                                            {
+                                                <MudAlert Severity="Severity.Success" Style="margin-top: 13px;">@checksuccess</MudAlert>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+
+    /*Product Info Tabs*/
+    <div class="product-info-tabs">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="description-tab" data-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">Description</a>
+            </li>
+            @if (User_id != 0)
+            {
+                <li class="nav-item">
+                    <a class="nav-link" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review" aria-selected="false">Review</a>
+                </li>
+            }
+
+            @if (GetReviewCount.Count() > 0)
+            {
+                <li class="nav-item">
+                    <a class="nav-link" id="viewreview-tab" data-toggle="tab" href="#viewreview" role="tab" aria-controls="viewreview" aria-selected="false">View Reviews (@GetReviewCount.Count())</a>
+                </li>
+            }
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            @if (Product != null)
+            {
+                @foreach (var product in Product)
+                {
+                    <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
+                        @product.Description
+                    </div>
+                }
+            }
+
+            <div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
+                <div class="review-heading">REVIEW</div>
+                @if (GetReview.Count() > 0)
+                {
+                    @foreach (var review in GetReview)
+                    {
+                        <div class="form-group">
+                            <label>Your rating</label>
+                            <div class="reviews-counter">
+                                <div class="rate">
+                                    <MudRating ReadOnly="true" @bind-SelectedValue="review.Rating" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" style="padding-top: 15px;">
+                            <label>Your Review Message</label>
+                            @*<MudTextField T="string" Label="Review Message" @bind-Value="@review.Message" Variant="Variant.Text" Lines="5" />*@
+                            <MudText Align="Align.Left" Style="color:black;">@review.Message</MudText>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="form-group">
+                        <label>Your rating</label>
+                        <div class="reviews-counter">
+                            <div class="rate">
+                                <MudRating @bind-SelectedValue="@Rating" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" style="padding-top: 15px;">
+                        <MudTextField T="string" Label="Review Message" @bind-Value="@Message" Variant="Variant.Text" Lines="5" />
+
+                    </div>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Dark" Class="ml-auto" @onclick="() => AddReview()">Add Review</MudButton>
+                }
+            </div>
+
+            @if (GetReviewCount.Count() > 0)
+            {
+                @foreach (var Review in GetReviewCount)
+                {
+                    <div class="tab-pane fade" id="viewreview" role="tabpanel" aria-labelledby="viewreview-tab">
+                        <MudCard>
+                            <MudCardContent>
+                                <div style="display:flex;">
+                                    <MudAvatar Image="/Images/person.jpg" Style="width: 30px;height: 30px;" />
+                                    <MudText Align="Align.Left" Style="padding-left: 10px;padding-top: 2px;">Anonymous</MudText>
+                                </div>
+                            </MudCardContent>
+                            <MudCardActions>
+                                <MudRating ReadOnly="true" @bind-SelectedValue="@Review.Rating" Style="padding-top: 0px;padding-left: 8px;padding-bottom: 8px;" />
+                            </MudCardActions>
+                            <MudCardActions>
+                                <MudText Align="Align.Left" Style="padding-left: 10px;padding-top: 2px;padding-top: 0px;padding-left: 12px;">@Review.Message</MudText>
+                            </MudCardActions>
+                        </MudCard>
+
+
+                    </div>
+                }
+            }
+        </div>
+    </div>
+}
+
+<MudScrollToTop>
+    <MudFab Color="Color.Default" Icon="@Icons.Filled.ArrowUpward" />
+</MudScrollToTop>

@@ -1,0 +1,25 @@
+﻿@inherits LayoutComponentBase
+@inject ILocalStorageService LocalStorage
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthStateProvider
+
+<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+
+    @*NavBar*@
+    <Appbar></Appbar>
+
+    @*Body*@
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.Large" Class="my-0 pt-0">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+
+    @*Footer*@
+    <Footer></Footer>
+
+</MudLayout>

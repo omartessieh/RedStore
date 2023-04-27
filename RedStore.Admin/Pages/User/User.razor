@@ -1,0 +1,116 @@
+﻿@page "/User"
+@inject ISnackbar Snackbar
+
+<div class="row">
+    <div class="col-sm-10 col-12" style="margin: auto">
+        <h3 id="quote" style="margin: auto">Users</h3>
+    </div>
+    <div class="col-sm-2 col-12" style="margin: auto">
+
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.PersonAdd" FullWidth="true" @onclick="() => AddUSer()">Add User</MudButton>
+    </div>
+</div>
+
+<MudDataGrid T="UserDto" MultiSelection="true" Hover="true" Dense="true" Bordered="true" Items="@GetUsers" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?"465px":"")" Class="mt-3 mb-3" Hideable="true">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6" Style="margin: auto">Users List</MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start" Immediate="true" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <Columns>
+
+        <Column T="UserDto" Field="Username" Title="Username" CellStyle="min-width: 300px">
+            <CellTemplate>
+                <MudText Typo="Typo.subtitle1">@context.Item.Username</MudText>
+            </CellTemplate>
+        </Column>
+
+        <Column T="UserDto" Field="First_Name" Title="First Name" CellStyle="min-width: 300px">
+            <CellTemplate>
+                <MudText Typo="Typo.subtitle1">@context.Item.First_Name</MudText>
+            </CellTemplate>
+        </Column>
+
+        <Column T="UserDto" Field="Last_Name" Title="Last Name" CellStyle="min-width: 300px">
+            <CellTemplate>
+                <MudText Typo="Typo.subtitle1">@context.Item.Last_Name</MudText>
+            </CellTemplate>
+        </Column>
+
+        <Column T="UserDto" Field="Password" Title="Password" CellStyle="min-width: 300px">
+            <CellTemplate>
+                <MudText Typo="Typo.subtitle1">@context.Item.Password</MudText>
+            </CellTemplate>
+        </Column>
+
+        <Column T="UserDto" Field="Email" Title="Email" CellStyle="min-width: 300px">
+            <CellTemplate>
+                <MudText Typo="Typo.subtitle1">@context.Item.Email</MudText>
+            </CellTemplate>
+        </Column>
+
+        <Column T="UserDto" Field="Phone_Number" Title="Phone Number" CellStyle="min-width: 300px">
+            <CellTemplate>
+                <MudText Typo="Typo.subtitle1">@context.Item.Phone_Number</MudText>
+            </CellTemplate>
+        </Column>
+
+        <Column T="UserDto" Field="Country" Title="Country" CellStyle="min-width: 300px">
+            <CellTemplate>
+                <MudText Typo="Typo.subtitle1">@context.Item.Country</MudText>
+            </CellTemplate>
+        </Column>
+
+        <Column T="UserDto" Field="Governorate" Title="Governorate" CellStyle="min-width: 300px">
+            <CellTemplate>
+                <MudText Typo="Typo.subtitle1">@context.Item.Governorate</MudText>
+            </CellTemplate>
+        </Column>
+
+        <Column T="UserDto" Field="City" Title="City" CellStyle="min-width: 300px">
+            <CellTemplate>
+                <MudText Typo="Typo.subtitle1">@context.Item.City</MudText>
+            </CellTemplate>
+        </Column>
+
+        <Column T="UserDto" Field="Street" Title="Street" CellStyle="min-width: 300px">
+            <CellTemplate>
+                <MudText Typo="Typo.subtitle1">@context.Item.Street</MudText>
+            </CellTemplate>
+        </Column>
+
+        <Column T="UserDto" Field="Building" Title="Building" CellStyle="min-width: 300px">
+            <CellTemplate>
+                <MudText Typo="Typo.subtitle1">@context.Item.Building</MudText>
+            </CellTemplate>
+        </Column>
+
+        <Column T="UserDto" Field="Floor" Title="Floor">
+            <CellTemplate>
+                <MudText Typo="Typo.subtitle1">@context.Item.Floor</MudText>
+            </CellTemplate>
+        </Column>
+
+        <Column T="UserDto" Field="Created_at" Title="Datetime" CellStyle="min-width: 300px">
+            <CellTemplate>
+                <MudText Typo="Typo.subtitle1">@context.Item.Created_at</MudText>
+            </CellTemplate>
+        </Column>
+
+        <Column T="UserDto" Field="User_id" Title="Delete" Sortable="false" Filterable="false">
+            <CellTemplate>
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete" Style="color:red" @onclick="@(() => Delete(@context.Item.User_id))"></MudIconButton>
+            </CellTemplate>
+        </Column>
+
+        <Column T="UserDto" Field="User_id" Title="Edit" Sortable="false" Filterable="false">
+            <CellTemplate>
+                <MudIconButton Icon="@Icons.Material.Filled.Edit" aria-label="Edit" Style="color:green" @onclick="@(() => Edit(@context.Item.User_id))"></MudIconButton>
+            </CellTemplate>
+        </Column>
+
+    </Columns>
+    <PagerContent>
+        <MudDataGridPager T="UserDto" />
+    </PagerContent>
+</MudDataGrid>

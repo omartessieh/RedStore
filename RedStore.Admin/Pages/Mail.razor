@@ -1,0 +1,65 @@
+﻿@page "/Mail"
+
+<div class="row">
+    <div class="col-sm-12 col-12" style="margin: auto">
+        <h3 id="quote" style="margin: auto">Messages List</h3>
+    </div>
+</div>
+
+<MudDataGrid T="ContactDto" MultiSelection="true" Hover="true" Dense="true" Bordered="true" Items="@GetContacts" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?"465px":"")" Class="mt-3 mb-3" Hideable="true">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6" Style="margin: auto">Messages</MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start" Immediate="true" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <Columns>
+
+        <Column T="ContactDto" Field="Username" Title="Username" CellStyle="min-width: 300px">
+            <CellTemplate>
+                <MudText Typo="Typo.subtitle1">@context.Item.Username</MudText>
+            </CellTemplate>
+        </Column>
+
+        <Column T="ContactDto" Field="Email" Title="Email" CellStyle="min-width: 300px">
+            <CellTemplate>
+                <MudText Typo="Typo.subtitle1">@context.Item.Email</MudText>
+            </CellTemplate>
+        </Column>
+
+        <Column T="ContactDto" Field="Subject" Title="Subject" CellStyle="min-width: 300px">
+            <CellTemplate>
+                <MudText Typo="Typo.subtitle1">@context.Item.Subject</MudText>
+            </CellTemplate>
+        </Column>
+
+        <Column T="ContactDto" Field="Created_at" Title="Datetime" CellStyle="min-width: 300px">
+            <CellTemplate>
+                <MudText Typo="Typo.subtitle1">@context.Item.Created_at</MudText>
+            </CellTemplate>
+        </Column>
+
+        <Column T="ContactDto" Field="Message" Title="Message" Sortable="false" Filterable="false" CellStyle="min-width: 200px">
+            <CellTemplate>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="@(() => OpenMessage(@context.Item.Message,@context.Item.Subject))">View Message</MudButton>
+            </CellTemplate>
+        </Column>
+
+    </Columns>
+    <PagerContent>
+        <MudDataGridPager T="ContactDto" />
+    </PagerContent>
+</MudDataGrid>
+
+<MudPopover Open="_isOpen" OverflowBehavior="OverflowBehavior.FlipAlways" AnchorOrigin="Origin.CenterCenter" TransformOrigin="Origin.CenterCenter" Paper="false" Style="width: 50%;" Fixed="true" Class="px-4 pt-4">
+    <MudPaper Outlined="true" Class="px-4 py-8">
+        <div class="row" style="padding-bottom: 10px;">
+            <div class="col-md-6 col-sm-12" style="margin: auto;">
+                <MudText>Subject: @PopSubject</MudText>
+            </div>
+            <div class="col-md-6 col-sm-12 align-md-end">
+                <MudIconButton Icon="@Icons.Material.Filled.Close" aria-label="Close" @onclick="@(() => Open())" style="float: right;margin-right: 1px;"></MudIconButton>
+            </div>
+        </div>
+        <MudText Align="Align.Center" Style="word-wrap: break-word;text-align: left;">@PopMessage</MudText>
+    </MudPaper>
+</MudPopover>

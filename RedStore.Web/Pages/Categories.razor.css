@@ -1,0 +1,185 @@
+﻿.bounceIn {
+    opacity: 0;
+    animation-delay: 0.5s;
+    animation-duration: 0.5s;
+    animation-name: bounceIn;
+    animation-fill-mode: forwards;
+}
+
+.bounceOut {
+    animation-duration: 0.5s;
+    animation-name: bounceOut;
+    animation-fill-mode: forwards;
+}
+
+.backInDown {
+    opacity: 0;
+    animation-delay: 0.5s;
+    animation-duration: 0.5s;
+    animation-name: backInDown;
+    animation-fill-mode: forwards;
+}
+
+.backOutDown {
+    animation-duration: 0.5s;
+    animation-name: backOutDown;
+    animation-fill-mode: forwards;
+}
+
+.rotateIn {
+    opacity: 0;
+    animation-delay: 0.5s;
+    animation-duration: 0.5s;
+    animation-name: rotateIn;
+    animation-fill-mode: forwards;
+}
+
+.rotateOut {
+    animation-duration: 0.5s;
+    animation-name: rotateOut;
+    animation-fill-mode: forwards;
+}
+
+
+/*All Categories Title*/
+.title {
+    text-align: center;
+    margin: 30px auto 0px;
+    position: relative;
+    line-height: 60px;
+    color: #555;
+}
+
+    .title::after {
+        content: "";
+        background: black;
+        width: 80px;
+        height: 5px;
+        border-radius: 5px;
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+/*Brand Carousel*/
+.row {
+    padding-top: 20px;
+}
+
+.titlebar {
+    overflow: hidden;
+}
+
+    .titlebar .next-back {
+        margin: 12px 0;
+        width: 100%;
+    }
+
+        .titlebar .next-back strong {
+            font-size: 20px;
+        }
+
+        .titlebar .next-back .button {
+            float: right;
+        }
+
+        .titlebar .next-back span a {
+            font-size: 12px;
+            text-transform: uppercase;
+            font-family: Poppins;
+            color: #222222;
+        }
+
+            .titlebar .next-back span a:hover {
+                text-decoration: none;
+                color: #888888;
+            }
+
+        .titlebar .next-back span {
+            padding: 0 8px 0 5px;
+            display: inline-block;
+            line-height: 10px;
+        }
+
+            .titlebar .next-back span:last-child {
+                border-right: none;
+                padding-right: 0;
+            }
+
+.carousel {
+    margin-bottom: 0;
+    padding: 0 0 30px 0;
+}
+
+.arrival-product .arrival-item ul {
+    margin: 0;
+    padding: 0;
+}
+
+    .arrival-product .arrival-item ul li {
+        float: left;
+        list-style: none;
+        width: 10%;
+        overflow: hidden;
+        margin-right: 2.6%;
+    }
+
+        .arrival-product .arrival-item ul li:last-child {
+            margin-right: 0;
+        }
+
+/*Search*/
+.autocomplete {
+    position: relative;
+}
+
+    .autocomplete .options {
+        position: absolute;
+        top: 63px;
+        left: 0;
+        background: white;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        z-index: 10;
+        border: 1px solid #ced4da;
+        border-radius: 0.5rem;
+        box-shadow: 0 30px 25px 8px rgba(0, 0, 0, 0.1);
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        min-height: 10px;
+        max-height: 210px;
+        overflow: scroll;
+        overflow-y: auto;
+    }
+
+    .autocomplete .option {
+        display: block;
+        padding: 0.50rem;
+    }
+
+.option-text {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.autocomplete .option .option-text {
+    padding: 0.25rem 0.5rem;
+}
+
+.autocomplete .option:hover {
+    background: #1E90FF;
+    color: #fff;
+}
+
+.autocomplete .option.disabled {
+    background-color: lightgrey;
+    cursor: not-allowed;
+}
+
+    .autocomplete .option.disabled:hover {
+        background: lightgrey;
+        color: var(--bs-body);
+    }

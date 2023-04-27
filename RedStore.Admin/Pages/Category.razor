@@ -1,0 +1,110 @@
+﻿@page "/Category"
+@inject ISnackbar Snackbar
+
+<div class="row">
+    <div class="col-sm-10 col-12" style="margin: auto">
+        <h3 id="quote" style="margin: auto">Categories</h3>
+    </div>
+    <div class="col-sm-2 col-12" style="margin: auto">
+
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.PersonAdd" FullWidth="true" @onclick="() => OpenAddCategory()">Add Category</MudButton>
+    </div>
+</div>
+
+<MudDataGrid T="CategoryDto" MultiSelection="true" Hover="true" Dense="true" Bordered="true" Items="@GetCategories" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?"465px":"")" Class="mt-3 mb-3" Hideable="true">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6" Style="margin: auto">Categories List</MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start" Immediate="true" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <Columns>
+
+        <Column T="CategoryDto" Field="Title" Title="Title" CellStyle="min-width: 300px">
+            <CellTemplate>
+                <MudText Typo="Typo.subtitle1">@context.Item.Title</MudText>
+            </CellTemplate>
+        </Column>
+
+        <Column T="CategoryDto" Field="ImageURL" Title="ImageURL" CellStyle="min-width: 300px">
+            <CellTemplate>
+                <MudText Typo="Typo.subtitle1" @onclick="@(() => OpenImage(@context.Item.ImageURL))" Style="cursor: pointer">@context.Item.ImageURL</MudText>
+            </CellTemplate>
+        </Column>
+
+        <Column T="CategoryDto" Field="Category_id" Title="Delete" Sortable="false" Filterable="false">
+            <CellTemplate>
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete" Style="color:red" @onclick="@(() => Delete(@context.Item.Category_id,@context.Item.ImageURL))"></MudIconButton>
+            </CellTemplate>
+        </Column>
+
+    </Columns>
+    <PagerContent>
+        <MudDataGridPager T="CategoryDto" />
+    </PagerContent>
+</MudDataGrid>
+
+@*Show Category Image*@
+<MudPopover Open="_isOpen" OverflowBehavior="OverflowBehavior.FlipAlways" AnchorOrigin="Origin.CenterCenter" TransformOrigin="Origin.CenterCenter" Paper="false">
+    <MudPaper Outlined="true" Class="px-4 py-8">
+        <div class="row" style="padding-bottom: 10px;">
+            <div class="col-md-6 col-sm-12" style="margin: auto;">
+                <MudText>Carousel: @imageSource</MudText>
+            </div>
+            <div class="col-md-6 col-sm-12 align-md-end">
+                <MudIconButton Icon="@Icons.Material.Filled.Close" aria-label="Close" @onclick="@(() => OpenImage(@imageSource))" style="float: right;margin-right: 1px;"></MudIconButton>
+            </div>
+        </div>
+        <img class="d-block w-100 rounded-lg" src="@Categorieslink/@imageSource" alt="" style="width: auto;height:auto">
+    </MudPaper>
+</MudPopover>
+
+@*Add Category*@
+<MudPopover Open="_isOpenCategory" OverflowBehavior="OverflowBehavior.FlipAlways" AnchorOrigin="Origin.CenterCenter" TransformOrigin="Origin.CenterCenter" Paper="false">
+    <MudPaper Outlined="true" Class="px-4 py-8">
+        <div class="row" style="padding-bottom: 10px;">
+            <div class="col-md-6 col-sm-12" style="margin: auto;">
+                <MudText>Category</MudText>
+            </div>
+            <div class="col-md-6 col-sm-12 align-md-end">
+                <MudIconButton Icon="@Icons.Material.Filled.Close" aria-label="Close" @onclick="@(() => OpenAddCategory())" style="float: right;margin-right: 1px;"></MudIconButton>
+            </div>
+        </div>
+
+        <MudCardContent>
+            <MudGrid>
+                <MudItem xs="12">
+                    <div class="control-group" style="padding-bottom:11px;">
+                        <input type="text" class="form-control" @bind="@CategoryTitle" @oninput="@((e) => { CategoryTitle=(string)e.Value;})" placeholder="Enter Title" required="required" />
+                    </div>
+                </MudItem>
+            </MudGrid>
+        </MudCardContent>
+
+        <MudCardContent>
+            <MudGrid>
+                <MudItem xs="12">
+                    <MudFileUpload T="IBrowserFile" OnFilesChanged="OnInputFileChanged">
+                        <ButtonTemplate>
+                            <MudButton HtmlTag="label"
+                                       Variant="Variant.Filled"
+                                       Color="Color.Primary"
+                                       StartIcon="@Icons.Material.Filled.CloudUpload"
+                                       for="@context" FullWidth="true">
+                                Upload Category Image
+                            </MudButton>
+                        </ButtonTemplate>
+                    </MudFileUpload>
+                </MudItem>
+            </MudGrid>
+        </MudCardContent>
+
+        <MudCardContent>
+            <MudGrid>
+                <MudItem xs="12">
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" @onclick="() => SubmitCategory()">Add Category</MudButton>
+                </MudItem>
+            </MudGrid>
+        </MudCardContent>
+
+    </MudPaper>
+</MudPopover>

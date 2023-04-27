@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32630.192
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedStore.Web", "RedStore.Web\RedStore.Web.csproj", "{4452C5C1-B179-4D8C-87B3-245281862AF3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedStore.Api", "RedStore.Api\RedStore.Api.csproj", "{AB642C08-49F3-4592-8FF1-D31CBA526127}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedStore.Models", "RedStore.Models\RedStore.Models.csproj", "{5F48ACA3-146D-4BBC-8A59-F397E3B1888E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedStore.Admin", "RedStore.Admin\RedStore.Admin.csproj", "{0327A87B-ED55-407E-A6D1-CC359067BF75}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4452C5C1-B179-4D8C-87B3-245281862AF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4452C5C1-B179-4D8C-87B3-245281862AF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4452C5C1-B179-4D8C-87B3-245281862AF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4452C5C1-B179-4D8C-87B3-245281862AF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB642C08-49F3-4592-8FF1-D31CBA526127}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB642C08-49F3-4592-8FF1-D31CBA526127}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB642C08-49F3-4592-8FF1-D31CBA526127}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB642C08-49F3-4592-8FF1-D31CBA526127}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F48ACA3-146D-4BBC-8A59-F397E3B1888E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F48ACA3-146D-4BBC-8A59-F397E3B1888E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F48ACA3-146D-4BBC-8A59-F397E3B1888E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F48ACA3-146D-4BBC-8A59-F397E3B1888E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0327A87B-ED55-407E-A6D1-CC359067BF75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0327A87B-ED55-407E-A6D1-CC359067BF75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0327A87B-ED55-407E-A6D1-CC359067BF75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0327A87B-ED55-407E-A6D1-CC359067BF75}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9509A121-417D-4C0E-952C-54C09D7F3CBA}
+	EndGlobalSection
+EndGlobal

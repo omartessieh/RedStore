@@ -1,0 +1,165 @@
+﻿@page "/Product"
+@inject ISnackbar Snackbar
+
+<div class="row">
+    <div class="col-sm-10 col-12" style="margin: auto">
+        <h3 id="quote" style="margin: auto">Products</h3>
+    </div>
+    <div class="col-sm-2 col-12" style="margin: auto">
+
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" FullWidth="true" @onclick="() => OpenAddProduct()">Add Product</MudButton>
+    </div>
+</div>
+
+<MudDataGrid T="ProductDto" MultiSelection="true" Hover="true" Dense="true" Bordered="true" Items="@GetProducts" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?"465px":"")" Class="mt-3 mb-3" Hideable="true">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6" Style="margin: auto">Products List</MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start" Immediate="true" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <Columns>
+
+        <Column T="ProductDto" Field="Title" Title="Product Title" CellStyle="min-width: 700px">
+            <CellTemplate>
+                <MudText Typo="Typo.subtitle1">@context.Item.Title</MudText>
+            </CellTemplate>
+        </Column>
+
+                <Column T="ProductDto" Field="ImageURL" Title="Product Image" CellStyle="min-width: 700px">
+            <CellTemplate>
+                <MudText Typo="Typo.subtitle1" @onclick="@(() => OpenImage(@context.Item.ImageURL))" Style="cursor: pointer">@context.Item.ImageURL</MudText>
+            </CellTemplate>
+        </Column>
+
+       <Column T="ProductDto" Field="Description" Title="Description" Sortable="false" Filterable="false">
+            <CellTemplate>
+                <MudIconButton Icon="@Icons.Material.Filled.Description" aria-label="Description" Style="color:gray" @onclick="@(() => OpenDescription(@context.Item.Description))"></MudIconButton>
+            </CellTemplate>
+        </Column>
+
+        <Column T="ProductDto" Field="Product_id" Title="Delete" Sortable="false" Filterable="false">
+            <CellTemplate>
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete" Style="color:red" @onclick="@(() => Delete(@context.Item.Product_id))"></MudIconButton>
+            </CellTemplate>
+        </Column>
+
+        <Column T="ProductDto" Field="Product_id" Title="Info" Sortable="false" Filterable="false">
+            <CellTemplate>
+                <MudIconButton Icon="@Icons.Material.Filled.Info" aria-label="Info" Style="color:green" @onclick="@(() => OpenInfo(@context.Item.Product_id,@context.Item.Title))"></MudIconButton>
+            </CellTemplate>
+        </Column>
+
+    </Columns>
+    <PagerContent>
+        <MudDataGridPager T="ProductDto" />
+    </PagerContent>
+</MudDataGrid>
+
+@*Show Product Image*@
+<MudPopover Open="_isOpen" OverflowBehavior="OverflowBehavior.FlipAlways" AnchorOrigin="Origin.CenterCenter" TransformOrigin="Origin.CenterCenter" Paper="false">
+    <MudPaper Outlined="true" Class="px-4 py-8">
+        <div class="row" style="padding-bottom: 10px;">
+            <div class="col-md-6 col-sm-12" style="margin: auto;">
+                <MudText>Product: @imageSource</MudText>
+            </div>
+            <div class="col-md-6 col-sm-12 align-md-end">
+                <MudIconButton Icon="@Icons.Material.Filled.Close" aria-label="Close" @onclick="@(() => OpenImage(@imageSource))" style="float: right;margin-right: 1px;"></MudIconButton>
+            </div>
+        </div>
+        <img class="d-block w-100 rounded-lg" src="@Productslink/@imageSource" alt="" style="width: 300px;height:300px">
+    </MudPaper>
+</MudPopover>
+
+@*Show Product Description*@
+<MudPopover Open="_DescriptionisOpen" OverflowBehavior="OverflowBehavior.FlipAlways" AnchorOrigin="Origin.CenterCenter" TransformOrigin="Origin.CenterCenter" Paper="false" Style="width: 50%;" Fixed="true" Class="px-4 pt-4">
+    <MudPaper Outlined="true" Class="px-4 py-8">
+        <div class="row" style="padding-bottom: 10px;">
+            <div class="col-md-6 col-sm-12" style="margin: auto;">
+                <MudText>Description</MudText>
+            </div>
+            <div class="col-md-6 col-sm-12 align-md-end">
+                <MudIconButton Icon="@Icons.Material.Filled.Close" aria-label="Close" @onclick="@(() => OpenDescription(@PopDescription))" style="float: right;margin-right: 1px;"></MudIconButton>
+            </div>
+        </div>
+        <MudText Align="Align.Center" Style="word-wrap: break-word;text-align: left;">@PopDescription</MudText>
+    </MudPaper>
+</MudPopover>
+
+@*Add Product*@
+<MudPopover Open="_isOpenAddProduct" OverflowBehavior="OverflowBehavior.FlipAlways" AnchorOrigin="Origin.CenterCenter" TransformOrigin="Origin.CenterCenter" Paper="false" style="width: 70%;">
+    <MudPaper Outlined="true" Class="px-4 py-8">
+        <div class="row" style="padding-bottom: 10px;">
+            <div class="col-md-6 col-sm-12" style="margin: auto;">
+                <MudText>Add Product</MudText>
+            </div>
+            <div class="col-md-6 col-sm-12 align-md-end">
+                <MudIconButton Icon="@Icons.Material.Filled.Close" aria-label="Close" @onclick="@(() => OpenAddProduct())" style="float: right;margin-right: 1px;"></MudIconButton>
+            </div>
+        </div>
+
+        <MudCardContent>
+            <MudGrid>
+                <MudItem xs="12">
+                    <MudSelect T="int" @bind-Value="SelectedCategoryId" Variant="Variant.Outlined">
+                        <MudSelectItem Value="0">Select Category</MudSelectItem>
+                        @foreach (var item in GetCategories)
+                        {
+                            <MudSelectItem Value="@item.Category_id">@item.Title</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+            </MudGrid>
+
+            <MudGrid>
+                <MudItem xs="12">
+                    <MudSelect T="int" @bind-Value="SelectedSubCategoryId" Variant="Variant.Outlined">
+                        <MudSelectItem Value="0">Select SubCategory</MudSelectItem>
+                        @foreach (var item in GetSubCategoriesView)
+                        {
+                            <MudSelectItem Value="@item.SubCategory_id">@item.Title</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+            </MudGrid>
+
+            <MudGrid>
+                <MudItem xs="12">
+                    <div class="control-group" style="padding-bottom:11px;">
+                        <input type="text" class="form-control" @bind="@ProductTitle" @oninput="@((e) => { ProductTitle=(string)e.Value;})" placeholder="Enter Title" required="required" />
+                    </div>
+                </MudItem>
+            </MudGrid>
+
+            <MudGrid>
+                <MudItem xs="12">
+                    <div class="control-group">
+                        <textarea class="form-control" rows="4" placeholder="Enter Description" @bind="@ProductDescription" @oninput="@((e) => { ProductDescription=(string)e.Value;})"></textarea>
+                    </div>
+                </MudItem>
+            </MudGrid>
+
+            <MudGrid>
+                <MudItem xs="12">
+                    <MudFileUpload T="IBrowserFile" OnFilesChanged="OnInputFileChanged">
+                        <ButtonTemplate>
+                            <MudButton HtmlTag="label"
+                                       Variant="Variant.Filled"
+                                       Color="Color.Primary"
+                                       StartIcon="@Icons.Material.Filled.CloudUpload"
+                                       for="@context" FullWidth="true">
+                                Upload Product Image
+                            </MudButton>
+                        </ButtonTemplate>
+                    </MudFileUpload>
+                </MudItem>
+            </MudGrid>
+
+            <MudGrid>
+                <MudItem xs="12">
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" @onclick="() => SubmitProduct()">Add SubCategory</MudButton>
+                </MudItem>
+            </MudGrid>
+        </MudCardContent>
+
+    </MudPaper>
+</MudPopover>
